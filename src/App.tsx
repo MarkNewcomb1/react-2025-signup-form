@@ -1,6 +1,8 @@
 import "./App.css";
 import SignUpForm from "./components/SignupForm";
-export default function App() {
+import type { FC } from 'react';
+
+const App: FC = () => {
   return (
     <div className="App">
       <h1 className="mb-4 text-4xl font-extrabold">Signup Form</h1>
@@ -8,3 +10,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

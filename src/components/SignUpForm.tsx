@@ -1,23 +1,38 @@
 import React, { useState, useEffect } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 
-const SignUpForm = () => {
-    const [form, setForm] = useState({
+type FormData = {
+    name: string;
+    email: string;
+    password: string;
+};
+
+type FormErrors = {
+    name?: string;
+    email?: string;
+    password?: string;
+}
+
+const SignUpForm: React.FC = () => {
+    const [form, setForm] = useState<FormData>({
         name: '',
         email: '',
         password: '',
     });
 
-    const [errors, setErrors] = useState({});
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isFormValid, setIsFormValid] = useState(false);
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+    const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
     useEffect(() => {
     setIsFormValid(
-      form.name.trim() && validateEmail(form.email) && form.password.length >= 6
+      !!form.name.trim() && 
+      validateEmail(form.email) && 
+      form.password.length >= 6
     );
   }, [form]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
         ...prev,
@@ -25,10 +40,10 @@ const SignUpForm = () => {
     }));
   };
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    const validate = () => {
-    const newErrors = {};
+    const validate = (): FormErrors => {
+    const newErrors: FormErrors = {};
     if (!form.name.trim()) newErrors.name = "Name is required.";
     if (!form.email) newErrors.email = "Email is required.";
     else if (!validateEmail(form.email))
@@ -39,7 +54,7 @@ const SignUpForm = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
